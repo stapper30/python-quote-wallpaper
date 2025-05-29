@@ -35,7 +35,7 @@ This project randomly combines an image from the `images/` folder with one of th
 ```
 
 ## Other Notes
-Insure Pillow is installed using: 
+Insure required packages are installed using: 
 ```bash
-   pip install Pillow
+   pip install -r requirements.txt
 ```
