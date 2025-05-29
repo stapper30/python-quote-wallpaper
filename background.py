@@ -3,6 +3,11 @@ import os
 import time
 import random
 from PIL import Image, ImageDraw, ImageFont, ImageColor
+import requests
+from datetime import date
+import dotenv
+
+base_dir = f"C://path/to/your/folder"
 
 quotes = [
     {"text": "Those who cannot remember the past are condemned to repeat it.", "attribution": "George Santayana"},
@@ -24,10 +29,6 @@ quotes = [
     # Sample quotes, add your own
     
 ]
-import requests
-from datetime import date
-import dotenv
-import os
 
 dotenv.load_dotenv()
 canvas_token = os.getenv("CANVAS_KEY")
@@ -51,6 +52,7 @@ def assignments_message():
     message_body += "\n"
 
     for course in courses:
+        #replace with the URL of your Canvas domain.
         response = requests.get(f"https://canvas.auckland.ac.nz/api/v1/courses/{course.id}/assignments", headers={"Authorization": canvas_token}, params={"order_by": "due_at", "bucket": "upcoming"})
 
         message_body += str(course)
@@ -76,14 +78,11 @@ courses = [
     Course(122117, "SOFTENG 282"),
     Course(121181, "COMPSYS 201")
 ]
-
-# assignments_message()    
-
-
+ 
 class Main:
     def __init__(self) -> None:
-        path = r"C:\Users\stapp\Documents\Code\PythonCode\background\images"
-        modified_path = r"C:\Users\stapp\Documents\Code\PythonCode\background\modified_images"
+        path = base_dir + "\images"
+        modified_path = r"\modified_images"
         
         file_index = random.randint(0, len(os.listdir(path)) - 1)
         filename = os.listdir(path)[file_index]
@@ -103,23 +102,6 @@ class Main:
             font = ImageFont.truetype(r"C:\Users\stapp\Downloads\Ancizar_Serif\AncizarSerif-VariableFont_wght.ttf", 100)
             font2 = ImageFont.truetype(r"C:\Users\stapp\Downloads\Ancizar_Serif\AncizarSerif-VariableFont_wght.ttf", 55)
 
-#             assignmentstest = """
-# Upcoming assignments:
-
-# ENGSCI 211
-#     LA Quiz 1 - Wednesday, May 28
-
-
-# SOFTENG 281
-#     A2 - Friday, May 23
-#     CR9 - Sunday, May 25
-
-
-# SOFTENG 282
-
-
-# COMPSYS 201
-#     Lab4 - Week 11 - Thursday, May 29"""
             img = Image.open(f)
             draw = ImageDraw.Draw(img, "RGBA")
             offset = (2, 2)
@@ -136,7 +118,6 @@ class Main:
             t_width = bbox[2] - bbox[0] + side_margin
             draw.rectangle((300 - side_margin/2, 1000, 300 + t_width, 1000 + t_height), fill=(0, 0, 0, 100))
 
-            # Calculate bounding box for assignments_test
             assignments = assignments_message()
             assignment_lines = assignments.strip().split("\n")
             if assignment_lines:
@@ -152,8 +133,9 @@ class Main:
             draw.text((3000, 300), assignments, font=font2, stroke_fill="white")
                 
             index = random.randint(0, 1000000)
-                
-            img.save(f"C:\\Users\\stapp\\Documents\\Code\\PythonCode\\background\\modified_images\\modified_image_{index}.png")
+
+            # replace with your own path
+            img.save(base_dir + f"\\modified_images\\modified_image_{index}.png")
             img.close()
-            ctypes.windll.user32.SystemParametersInfoW(20, 0, f"C:\\Users\\stapp\\Documents\\Code\\PythonCode\\background\\modified_images\\modified_image_{index}.png", 1 | 2)
+            ctypes.windll.user32.SystemParametersInfoW(20, 0, base_dir + f"\\modified_images\\modified_image_{index}.png", 1 | 2)
 application = Main()  
